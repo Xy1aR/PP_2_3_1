@@ -15,7 +15,7 @@ public class AppInit extends AbstractAnnotationConfigDispatcherServletInitialize
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[] {
+        return new Class<?>[]{
                 SpringConfig.class
         };
     }
@@ -27,12 +27,20 @@ public class AppInit extends AbstractAnnotationConfigDispatcherServletInitialize
 
     @Override
     public void onStartup(ServletContext context) throws ServletException {
+
         super.onStartup(context);
+
+        registerEncodingFilter(context);
         registerHiddenFieldFilter(context);
     }
 
     private void registerHiddenFieldFilter(ServletContext context) {
         context.addFilter("hiddenHttpMethodFilter",
-                new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null ,true, "/*");
+                new HiddenHttpMethodFilter()).addMappingForUrlPatterns(null, true, "/*");
+    }
+
+    private void registerEncodingFilter(ServletContext context) {
+        context.addFilter("encodingFilter",
+                new CharacterEncodingFilter()).addMappingForUrlPatterns(null, true, "/*");
     }
 }
